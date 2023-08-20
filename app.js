@@ -13,9 +13,11 @@ app.get('/', async (req, res) => {
 app.get('/bbcNews', async (req, res) => {
     try {
         const data = await bbcNews()
-        res.send(data);
+        console.log(data)
+        res.send(data)
     } catch (error) {
-        res.send('error', error)
+        console.log(error)
+        res.status(400).send(error)
     }
     
 })
