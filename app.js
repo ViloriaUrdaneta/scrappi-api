@@ -11,8 +11,13 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/bbcNews', async (req, res) => {
-    const data = await bbcNews()
-    res.send(data);
+    try {
+        const data = await bbcNews()
+        res.send(data);
+    } catch (error) {
+        res.send('error', error)
+    }
+    
 })
 
 module.exports = app;
