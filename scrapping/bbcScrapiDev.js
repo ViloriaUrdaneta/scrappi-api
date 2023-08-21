@@ -1,21 +1,10 @@
 const puppeteer = require("puppeteer");
 require("dotenv").config()
 
-const bbcNews = async () => {
+const bbcNewsDev = async () => {
 
     try {
-        const browser = await puppeteer.launch({
-            args: [
-                "--disable-setuid-sandbox",
-                "--no-sandbox",
-                "--single-process",
-                "--no-zygote",
-            ],
-            executablePath: 
-                process.env.NODE_ENV === 'production' 
-                    ? process.env.PUPPETEER_EXECUTABLE_PATH
-                    : puppeteer.executablePath(),
-        });
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto('https://www.bbc.com/mundo')
 
@@ -45,7 +34,6 @@ const bbcNews = async () => {
         }
         console.log(bbcNews)
         await browser.close();
-        
         return bbcNews
 
     } catch (error) {
@@ -56,5 +44,24 @@ const bbcNews = async () => {
 }
 
 module.exports = {
-    bbcNews
+    bbcNewsDev
 }
+
+
+/*
+   
+*/
+
+    /*
+   let titles = []
+   for (let topNewLink of topNewsLinks){
+       await page.goto(topNewLink)
+       await page.waitForTimeout(2000);
+       const title = await page.evaluate(() => {
+           const tmp = {}
+           tmp.title = document.querySelector('h1[id="content"]').innerText
+           tmp.subtitle = document.querySelector('main div p b').innerText
+           return tmp
+       })
+       titles.push(title)
+   }*/

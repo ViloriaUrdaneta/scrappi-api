@@ -1,9 +1,7 @@
-const puppeteer = require('puppeteer-extra');
-const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-const {executablePath} = require('puppeteer');
+const puppeteer = require('puppeteer');
+
 
 (async () => {
-    puppeteer.use(StealthPlugin())
     const browser = await puppeteer.launch({headless: false});
     const page = await browser.newPage();
     await page.goto('https://twitter.com/i/flow/login')

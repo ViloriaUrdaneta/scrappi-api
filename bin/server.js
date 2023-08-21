@@ -8,5 +8,5 @@ const server = http.createServer(app);
 server.listen(PORT);
 
 server.on('listening', () => {
-    console.log('Servidor escuchando en el puerto 3000')
+    console.log(`Servidor escuchando en el puerto ${PORT}`)
 });
