@@ -1,14 +1,15 @@
 const puppeteer = require("puppeteer");
+const fs = require('fs')
 require("dotenv").config()
 
 const bbcNewsDev = async () => {
 
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({headless: "new"});
         const page = await browser.newPage();
         await page.goto('https://www.bbc.com/mundo')
 
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await page.waitForSelector('ol[role="list"]')
         const topNewsLinks = await page.evaluate(() => {
             const topNews = document.querySelectorAll('ol[role="list"] li div div a')
@@ -19,21 +20,25 @@ const bbcNewsDev = async () => {
             return links
         })
         let bbcNews = []
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         for (let topNewsLink of topNewsLinks){
             await page.goto(topNewsLink)
-            await page.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             const bbcNew = await page.evaluate((topNewsLink) => {
                 const tmp = {}
-                tmp.title = document.querySelector('h1[id="content"]').innerText
-                tmp.subtitle = document.querySelector('main div p b').innerText
-                tmp.link = topNewsLink
-                return tmp
+                tmp.title = document.querySelector('h1[id="content"]').innerText;
+                tmp.subtitle = document.querySelector('main div p b').innerText;
+                tmp.link = topNewsLink;
+                return tmp;
             }, topNewsLink)
-            bbcNews.push(bbcNew)
+            bbcNews.push(bbcNew);
         }
         console.log(bbcNews)
         await browser.close();
+
+        const jsonBbcNews = JSON.stringify(bbcNews)
+        fs.writeFileSync('scrapping/bbcNews.json', jsonBbcNews, 'utf-8')
+
         return bbcNews
 
     } catch (error) {

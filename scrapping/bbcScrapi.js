@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer");
-require("dotenv").config()
+const fs = require('fs');
+require("dotenv").config();
 
 const bbcNews = async () => {
 
@@ -19,33 +20,33 @@ const bbcNews = async () => {
         const page = await browser.newPage();
         await page.goto('https://www.bbc.com/mundo')
 
-        await page.waitForTimeout(2000);
-        await page.waitForSelector('ol[role="list"]')
+        await new Promise(r => setTimeout(r, 2000));
+        await page.waitForSelector('ol[role="list"]');
         const topNewsLinks = await page.evaluate(() => {
-            const topNews = document.querySelectorAll('ol[role="list"] li div div a')
+            const topNews = document.querySelectorAll('ol[role="list"] li div div a');
             let links = [];
             for(let topNew of topNews){
-                links.push(topNew.href)
+                links.push(topNew.href);
             }
-            return links
+            return links;
         })
-        let bbcNews = []
-        await page.waitForTimeout(2000);
+        let bbcNews = [];
+        await new Promise(r => setTimeout(r, 2000));
         for (let topNewsLink of topNewsLinks){
-            await page.goto(topNewsLink)
-            await page.waitForTimeout(2000);
+            await page.goto(topNewsLink);
+            await new Promise(r => setTimeout(r, 2000));
             const bbcNew = await page.evaluate((topNewsLink) => {
                 const tmp = {}
-                tmp.title = document.querySelector('h1[id="content"]').innerText
-                tmp.subtitle = document.querySelector('main div p b').innerText
-                tmp.link = topNewsLink
-                return tmp
+                tmp.title = document.querySelector('h1[id="content"]').innerText;
+                tmp.subtitle = document.querySelector('main div p b').innerText;
+                tmp.link = topNewsLink;
+                return tmp;
             }, topNewsLink)
             bbcNews.push(bbcNew)
         }
-        console.log(bbcNews)
+        const jsonBbcNews = JSON.stringify(bbcNews)
+        fs.writeFileSync('scrapping/bbcNews.json', jsonBbcNews, 'utf-8')
         await browser.close();
-        
         return bbcNews
 
     } catch (error) {
