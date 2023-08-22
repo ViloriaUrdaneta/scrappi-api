@@ -2,7 +2,7 @@ const { bbcNewsDev } = require('../scrapping/bbcScrapiDev');
 const { badAndGoods } = require('../openai/openaiapi');
 const database = require('../database/db');
 
-const divideAndSaveNews = async () => {
+const ScarpDivideAndSaveNews = async () => {
     try {
         const bbcnews = await bbcNewsDev();
         const badGoodNews = await badAndGoods(bbcnews)
@@ -25,12 +25,13 @@ const divideAndSaveNews = async () => {
         for (const goodNew of goodNews){
             await database.goodNews.create(goodNew)
         }
+        return badGoodNews;
     } catch (error) {
-        console.log('error en route', error)
+        console.log('error en divideAndSaveNews', error)
     }
 }
 
 module.exports = {
-    divideAndSaveNews
+    ScarpDivideAndSaveNews
 }
 
