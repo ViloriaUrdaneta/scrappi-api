@@ -37,7 +37,7 @@ const bbcNewsDev = async () => {
         await browser.close();
 
         const jsonBbcNews = JSON.stringify(bbcNews)
-        fs.writeFileSync('scrapping/bbcNews.json', jsonBbcNews, 'utf-8')
+        fs.writeFileSync('bbcNews.json', jsonBbcNews, 'utf-8')
 
         return bbcNews
 

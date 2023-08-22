@@ -38,10 +38,9 @@ app.get('/bbcNewsDev', async (req, res) => {
 
 app.get('/savedBbcNews', async (req, res) => {
     try {
-        const jsonBbcNews = fs.readFileSync('scrapping/bbcNews.json', 'utf-8');
-        const data = JSON.parse(jsonBbcNews)
-        console.log(data)
-        res.status(200).send(data)
+        const jsonBbcNews = fs.readFileSync('bbcNews.json', 'utf-8');
+        const data = JSON.parse(jsonBbcNews);
+        res.status(200).send(data);
     } catch (error) {
         console.log(error)
         res.status(400).send(error)
