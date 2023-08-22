@@ -1,7 +1,6 @@
-const express = require('express')
-const { bbcNews } = require('./scrapping/bbcScrapi')
-const { bbcNewsDev } = require('./scrapping/bbcScrapiDev')
-const fs = require('fs')
+const express = require('express');
+const { bbcNews } = require('./scrapping/bbcScrapi');
+const fs = require('fs');
 
 const app = express();
 
@@ -24,9 +23,9 @@ app.get('/bbcNews', async (req, res) => {
     
 })
 
-app.get('/bbcNewsDev', async (req, res) => {
+app.get('/scrapAndSave', async (req, res) => {
     try {
-        const data = await bbcNewsDev()
+        const data = await bbcNews()
         console.log(data)
         res.status(200).send(data)
     } catch (error) {
@@ -35,6 +34,7 @@ app.get('/bbcNewsDev', async (req, res) => {
     }
     
 })
+
 
 app.get('/savedBbcNews', async (req, res) => {
     try {

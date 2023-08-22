@@ -6,6 +6,7 @@ const bbcNews = async () => {
 
     try {
         const browser = await puppeteer.launch({
+            headless: "new",
             args: [
                 "--disable-setuid-sandbox",
                 "--no-sandbox",
@@ -44,10 +45,8 @@ const bbcNews = async () => {
             }, topNewsLink)
             bbcNews.push(bbcNew)
         }
-        const jsonBbcNews = JSON.stringify(bbcNews)
-        fs.writeFileSync('scrapping/bbcNews.json', jsonBbcNews, 'utf-8')
         await browser.close();
-        return bbcNews
+        return bbcNews;
 
     } catch (error) {
         console.log(error);
