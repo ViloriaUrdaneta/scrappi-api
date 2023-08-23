@@ -1,10 +1,10 @@
-const { bbcNewsDev } = require('../scrapping/bbcScrapiDev');
+const { bbcNews } = require('../scrapping/bbcScrapi');
 const { badAndGoods } = require('../openai/openaiapi');
 const database = require('../database/db');
 
-const ScarpDivideAndSaveNews = async () => {
+const ScrapDivideAndSaveNews = async () => {
     try {
-        const bbcnews = await bbcNewsDev();
+        const bbcnews = await bbcNews();
         const badGoodNews = await badAndGoods(bbcnews)
         const positiveArrayString = badGoodNews.match(/Positivas: \[(.*?)\]/)[1];
         const negativeArrayString = badGoodNews.match(/Negativas: \[(.*?)\]/)[1];
@@ -27,11 +27,11 @@ const ScarpDivideAndSaveNews = async () => {
         }
         return badGoodNews;
     } catch (error) {
-        console.log('error en divideAndSaveNews', error)
+        console.log('error en ScrapDivideAndSaveNews', error)
     }
 }
 
 module.exports = {
-    ScarpDivideAndSaveNews
+    ScrapDivideAndSaveNews
 }
 

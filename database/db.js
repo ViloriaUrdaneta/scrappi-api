@@ -1,10 +1,26 @@
+require('dotenv').config();
 const Sequelize = require('sequelize');
 const db = require('../config/dbConfig')
 
-const sequelize = new Sequelize(db.database, db.username, db.password, {
-    host: db.host,
-    dialect: db.dialect
-});
+
+let sequelize;
+if (process.env.NODE_ENV === 'development'){
+    sequelize = new Sequelize(db.database, db.username, db.password, {
+        host: db.host,
+        dialect: db.dialect
+    });
+}else {
+    sequelize = new Sequelize(db.database, db.username, db.password, {
+        host: db.host,
+        dialect: db.dialect,
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }
+    });
+}
 
 const database = {};
 

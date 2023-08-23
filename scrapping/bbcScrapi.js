@@ -5,22 +5,24 @@ require("dotenv").config();
 const bbcNews = async () => {
 
     try {
-        const browser = await puppeteer.launch({
-            headless: "new",
-            args: [
-                "--disable-setuid-sandbox",
-                "--no-sandbox",
-                "--single-process",
-                "--no-zygote",
-            ],
-            executablePath: 
-                process.env.NODE_ENV === 'production' 
-                    ? process.env.PUPPETEER_EXECUTABLE_PATH
-                    : puppeteer.executablePath(),
-        });
+        let browser;
+        if(process.env.NODE_ENV === 'development'){
+            browser = await puppeteer.launch({headless: "new"});
+        } else{
+            browser = await puppeteer.launch({
+                headless: "new",
+                args: [
+                    "--disable-setuid-sandbox",
+                    "--no-sandbox",
+                    "--single-process",
+                    "--no-zygote",
+                ],
+                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
+            });
+        }
         const page = await browser.newPage();
         await page.goto('https://www.bbc.com/mundo')
-
+        console.log('estamos en bbc.com')
         await new Promise(r => setTimeout(r, 2000));
         await page.waitForSelector('ol[role="list"]');
         const topNewsLinks = await page.evaluate(() => {
@@ -45,11 +47,11 @@ const bbcNews = async () => {
             }, topNewsLink)
             bbcNews.push(bbcNew)
         }
+        console.log(bbcNews)
         await browser.close();
         return bbcNews;
-
     } catch (error) {
-        console.log(error);
+        console.log('error en bbcScrapi', error);
         return error;
     }
     
