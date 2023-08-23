@@ -5,21 +5,18 @@ require("dotenv").config();
 const bbcNews = async () => {
 
     try {
-        let browser;
-        if(process.env.NODE_ENV === 'development'){
-            browser = await puppeteer.launch({headless: "new"});
-        } else{
-            browser = await puppeteer.launch({
-                headless: "new",
-                args: [
-                    "--disable-setuid-sandbox",
-                    "--no-sandbox",
-                    "--single-process",
-                    "--no-zygote",
-                ],
-                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH
-            });
-        }
+        const browser = await puppeteer.launch({
+            args: [
+                "--disable-setuid-sandbox",
+                "--no-sandbox",
+                "--single-process",
+                "--no-zygote",
+            ],
+            executablePath: 
+                process.env.NODE_ENV === 'production' 
+                    ? process.env.PUPPETEER_EXECUTABLE_PATH
+                    : puppeteer.executablePath(),
+        });
         const page = await browser.newPage();
         await page.goto('https://www.bbc.com/mundo')
         console.log('estamos en bbc.com')
